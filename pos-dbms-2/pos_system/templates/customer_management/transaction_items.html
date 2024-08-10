@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Transaction Items for {{tran_id}}
+{% endblock %}
+
+{% block content %}
+<div class="super_container" style="margin-top: 80px;">
+    <table class="employee-table">
+        <thead class="employee-table-header">
+            <tr>
+                <th>Transaction Item ID</th>
+                <th>Product ID</th>
+                <th>Quantity</th>
+                <th>Sub Total</th>
+            </tr>
+        </thead>
+        <tbody class="employee-table-body">
+            {% for transaction_item in transaction_items %}
+            <tr class="employee-table-row">
+                <td class="employee-table-cell">{{ transaction_item.tran_item_id }}</td>
+                <td class="employee-table-cell">{{ transaction_item.product_id }}</td>
+                <td class="employee-table-cell">{{ transaction_item.quantity }}</td>
+                <td class="employee-table-cell">{{ transaction_item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<br>
+<!-- <a href="{{ url_for('open_transactions') }}" class="btn btn-primary">Back</a> -->
+{% endblock %}

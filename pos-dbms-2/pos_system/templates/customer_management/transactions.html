@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+Transactions
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 35px; padding: 20px">
+    <br>
+    <h1>Transactions</h1>
+    <div class="big-table-container">
+        <table class="employee-table">
+            <thead class="employee-table-header">
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Date-Time</th>
+                    <th>Total Amount</th>
+                    <th>Payment Method</th>
+                    <th>Customer ID</th>
+                </tr>
+            </thead>
+            <tbody class="employee-table-body">
+                {% for transaction in transactions %}
+                <tr class="employee-table-row">
+                    <td class="employee-table-cell">{{ transaction.tran_id }}</td>
+                    <td class="employee-table-cell">{{ transaction.date_time }}</td>
+                    <td class="employee-table-cell">{{ transaction.total_amount }}</td>
+                    <td class="employee-table-cell">{{ transaction.payment_method }}</td>
+                    <td class="employee-table-cell">
+                        <div style="display: flex; justify-content: space-between;">
+                            {{ transaction.cust_id }}
+                            <form action="{{url_for('show_transaction_items', tran_id=transaction.tran_id)}}"
+                                method="POST" style="display: inline;">
+                                <input type="submit" value="View Items" class="btn btn-primary">
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <a href="{{ url_for('customer_management') }}" class="btn btn-primary">Back</a>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <table class="table">
+    <thead class="thead-dark"> <!-- Added dark background to table header -->
+      <tr>
+        <th scope="col">Product</th>
+        <th scope="col">Price</th>
+        <th scope="col">Order</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td>{{ product.product_name }}</td>
+        <td>&#8377;{{ product.price }}</td> 
+        <td>
+          <form method="post" action="{{ url_for('add_to_cart', product_id=product.product_id) }}">
+            <div class="input-group"> <!-- Used input-group for better alignment -->
+              <input type="number" name="quantity" min="1" max="{{ product.get_quantity() }}" placeholder="Add quantity" value="1" class="form-control form-control-sm">
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-primary btn-sm">Add to Cart</button>
+              </div>
+            </div>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p><a href="{{ url_for('view_cart') }}" class="btn btn-secondary">View Cart</a></p>
+</div>
+{% endblock %}

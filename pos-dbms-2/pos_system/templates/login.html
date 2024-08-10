@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form method="POST" class="form-register" style="color: black">
+        {{ form.csrf_token() }}
+        {{ form.hidden_tag() }}
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <h3>
+                Please Login
+            </h3>
+        </div>
+        <br>
+        {{ form.emp_id.label() }}
+        {{ form.emp_id(class = "form-control", placeholder="Your Employee ID") }}
+        <br>
+        {{ form.password.label() }}
+        {{ form.password(class = "form-control", placeholder="password") }}
+        <br>
+        {{ form.submit(class = "btn btn-lg btn-block btn-primary") }}
+    </form>
+</div>
+{% endblock %}

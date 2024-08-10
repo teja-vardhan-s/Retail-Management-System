@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/radar-favicon-color-1.png') }}">
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/53d6701d82.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    {% block head %}
+
+    {% endblock %}
+</head>
+
+<body>
+    <div class="navigation-bar">
+        <div class="right-items">
+            <div class="menu-container" onclick="toggleMenu()">
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+            </div>
+        </div>
+        <div style="position: fixed; left: 100px;">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/radar-logo-transparent.png') }}" alt="" style="height: 50px;">
+            </a>
+        </div>
+        <div class="left-items">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('profile_page') }}" class="user-profile-link">Welcome, {{ current_user.emp_name }}</a>
+            <a href="{{ url_for('logout_page') }}" class="logout-link">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login_page') }}" class="login-link">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="sidebar">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('employee_management') }}">Employee Management</a>
+        <a href="{{ url_for('customer_management') }}">Customer Management</a>
+        <a href="{{ url_for('product_management') }}">Product Management</a>
+        <a href="{{ url_for('checkout') }}">Transaction Processing</a>
+        <a href="{{ url_for('inventory_management') }}">Inventory Management</a>
+        <a href="{{ url_for('supplier_management') }}">Supplier Management</a>
+        <a href="{{ url_for('report_and_analytics') }}">Reporting and Analytics</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="flash-messages-container" class="bottom-right">
+        {% for category, message in messages %}
+        <div class="flash-message alert-{{ category }}" data-category="{{ category }}">
+            {{ message }}
+            <span class="btn  close-button">&times;</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+
+
+
+
+
+    <div id="content">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+
+    <script>
+        // Function to toggle the menu open/closed
+        function toggleMenu() {
+            const menuContainer = document.querySelector('.menu-container');
+            const sidebar = document.querySelector('.sidebar');
+            menuContainer.classList.toggle('open');
+            sidebar.classList.toggle('open');
+        }
+
+    </script>
+
+    <script>
+        //function for close button - flash messages
+        document.addEventListener('DOMContentLoaded', function () {
+            const closeButtons = document.querySelectorAll('.close-button');
+            closeButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    const flashMessage = this.parentElement;
+                    flashMessage.style.display = 'none';
+                });
+            });
+        });
+    </script>
+
+    {% block script %}
+
+    {% endblock %}
+
+</body>
+
+</html>

@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Customer Management
+
+{% endblock %}
+
+{% block head %}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="super_container" style="margin-top: 35px; padding: 20px">
+    <br>
+    <div class="heading-button-container">
+        <h1>Customer Management</h1>
+        <button type="button" class="btn btn-outline-secondary" onclick="openAdd()">Add customer</button>
+    </div>
+    <br>
+    <h2>Customers</h2>
+    <!-- should edit these classes in table to have a consistent name  -->
+
+    <div class="big-table-container">
+        <table class="employee-table">
+            <thead class="employee-table-header">
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email Address</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody class="employee-table-body">
+                {% for customer in customers %}
+                <tr class="employee-table-row">
+                    <td class="employee-table-cell">{{ customer.cust_id }}</td>
+                    <td class="employee-table-cell">{{ customer.cust_name }}</td>
+                    <td class="employee-table-cell">{{ customer.phone }}</td>
+                    <td class="employee-table-cell">
+                        <div class="d-flex " style="justify-content: space-between;" >
+                            {{ customer.email }}
+                            <form id="myForm" action="{{ url_for('open_transactions') }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="customerId" value="{{ customer.cust_id }}">
+                                <button type="submit" class="btn btn btn-outline-primary btn-sm me-2"
+                                style="position: relative;">Open 
+                                Transactions</button>
+                            </form>
+                        </div>
+                    </td>
+                    <td class="employee-table-cell">
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn btn-outline-primary btn-sm me-2" onclick="openEditForm{{customer.cust_id}}()">
+                                <a>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </button>
+                            <form method="POST" action="{{ url_for('delete_customer', id=customer.cust_id) }}"
+                                onsubmit="return confirm('Are you sure you want to delete this customer?')">
+                                <input type="hidden" name="cust_id" value="{{ customer.cust_id }}">
+                                <button type="submit" class="btn btn btn-outline-danger btn-sm">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+    </div>
+
+
+    <!-- Add Customer Form -->
+    <div class="popup" id="popupAdd">
+        <div class="form-register">
+            <form method="POST" action="{{ url_for('add_customer') }}">
+                {{ add_form.csrf_token }}
+                {{ add_form.hidden_tag() }}
+                {{ add_form.cust_name.label() }}
+                {{ add_form.cust_name(class = "form-control", placeholder="customer name") }}
+                {{ add_form.phone.label() }}
+                {{ add_form.phone(class = "form-control", placeholder="your phone no") }}
+                {{ add_form.email.label() }}
+                {{ add_form.email(class = "form-control", placeholder="your email id (optional)") }}
+
+                <br>
+                {{ add_form.submit(class = "btn btn-outline-primary") }}
+                <button type="button" class="btn btn-outline-danger" onclick="closeAdd()">Close</button>
+            </form>
+        </div>
+    </div>
+
+    {% for customer in customers %}
+    <!-- Edit Customer Form -->
+    <div class="popup" id="popupEdit-{{customer.cust_id}}">
+        <div class="form-register">
+            <form method="POST" action="{{ url_for('edit_customer', cust_id=customer.cust_id) }}">
+                {{ edit_form.csrf_token }}
+                {{ edit_form.hidden_tag() }}
+                {{ edit_form.cust_name.label() }}
+                {{ edit_form.cust_name(class = "form-control", placeholder="customer name") }}
+                {{ edit_form.phone.label() }}
+                {{ edit_form.phone(class = "form-control", placeholder="your phone no") }}
+                {{ edit_form.email.label() }}
+                {{ edit_form.email(class = "form-control", placeholder="your email id (optional)") }}
+
+                <br>
+                {{ edit_form.submit(class = "btn btn-outline-primary") }}
+                <button type="button" class="btn btn-outline-danger" onclick="closeEditForm{{customer.cust_id}}()">Close</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+
+    <!-- do transaction Items  -->
+
+    <!-- overlay  -->
+    <div id="overlay" class="overlay"></div>
+
+</div>
+
+<script>
+    // Function to open the Transactions modal
+    function openTransactions(custId) {
+        document.getElementById("popupTransactions-" + custId).style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
+    // Function to close the Transactions modal
+    function closeTransactions(custId) {
+        document.getElementById("popupTransactions-" + custId).style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+</script>
+
+
+
+<script>
+    // Function to open the Add modal
+    function openAdd() {
+        document.getElementById("popupAdd").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
+    // Function to close the Add modal
+    function closeAdd() {
+        document.getElementById("popupAdd").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+
+    
+
+
+    // // Function to open the Add modal
+    // function openTransactions() {
+    //     document.getElementById("popupTransactionItems").style.display = "block";
+    //     document.getElementById("overlay").style.display = "block";
+    // }
+    // // Function to close the Add modal
+    // function closeTransactions() {
+    //     document.getElementById("popupTransactionItems").style.display = "none";
+    //     document.getElementById("overlay").style.display = "none";
+    // }
+</script>
+
+{% for customer in customers %}
+<script>
+    function openEditForm{{customer.cust_id}}() {
+        document.getElementById("popupEdit-{{customer.cust_id}}").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
+
+    function closeEditForm{{customer.cust_id}}() {
+        document.getElementById("popupEdit-{{customer.cust_id}}").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+</script>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Employee Management
+
+{% endblock %}
+
+{% block head %}
+
+<script>
+  // Function to open the Add modal
+  function openAdd() {
+    document.getElementById("popupAdd").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+  }
+  // Function to close the Add modal
+  function closeAdd() {
+    document.getElementById("popupAdd").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+  }
+  
+</script>
+
+
+
+{% endblock %}
+
+
+{% block content %}
+<div class="super_container" style="margin-top: 35px; padding: 20px;">
+  <br>
+  <div class="heading-button-container">
+    <h1>Employee Management</h1>
+    <div>
+      <button type="button" class="btn btn-outline-secondary" onclick="openAdd()">Add employee</button>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#RoleModal">
+        Role
+      </button>
+    </div>
+  </div>
+  <br>
+  <h2>Employees</h2>
+  <div class="table-container">
+    <table class="employee-table">
+      <thead class="employee-table-header">
+        <tr>
+          <th>Employee ID</th>
+          <th>Name</th>
+          <th>Email Address</th>
+          <th>Gender</th>
+          <th>Date of Birth</th>
+          <th>Date of Joining</th>
+          <th>Mobile Number</th>
+          <th>Salary</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody class="employee-table-body">
+        {% for employee in employees %}
+        <tr class="employee-table-row">
+          <td class="employee-table-cell">{{ employee.emp_id }}</td>
+          <td class="employee-table-cell">{{ employee.emp_name }}</td>
+          <td class="employee-table-cell">{{ employee.email }}</td>
+          <td class="employee-table-cell">{{ employee.gender }}</td>
+          <td class="employee-table-cell">{{ employee.dob }}</td>
+          <td class="employee-table-cell">{{ employee.doj }}</td>
+          <td class="employee-table-cell">{{ employee.mobile }}</td>
+          <td class="employee-table-cell">{{ employee.salary }}</td>
+          <td class="employee-table-cell">
+            <div class="d-flex align-items-center">
+              <button class="btn btn btn-outline-primary btn-sm me-2" onclick="openForm{{employee.emp_id}}()">
+                <a>
+                  <i class="fas fa-edit"></i>
+                </a>
+              </button>
+              <form method="POST" action="{{ url_for('delete_employee', id=employee.emp_id) }}"
+                onsubmit="return confirm('Are you sure you want to delete this employee?')">
+                <input type="hidden" name="emp_id" value="{{ employee.emp_id }}">
+                <button type="submit" class="btn btn btn-outline-danger btn-sm">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- activities table  -->
+  <h2>Employee activities</h2>
+  <div class="table-container" style="height: 300px; overflow-y: scroll;">
+    <table class="employee-table">
+      <thead class="employee-table-header">
+        <tr>
+          <th>Activity ID</th>
+          <th>Employee ID</th>
+          <th>Activity</th>
+          <th>Date</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody class="employee-table-body">
+        {% for activity in activities %}
+        <tr class="employee-table-row">
+          <td class="employee-table-cell">{{ activity.activity_id }}</td>
+          <td class="employee-table-cell">{{ activity.emp_id }}</td>
+          <td class="employee-table-cell">{{ activity.activity_type }}</td>
+          <td class="employee-table-cell">{{ activity.activity_date }}</td>
+          <td class="employee-table-cell">{{ activity.activity_time }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+{% for employee in employees %}
+<!-- popup form  -->
+<div id="popupForm-{{employee.emp_id}}" class="popup">
+  <h2>Edit Employee</h2>
+  <form class="form-register" action="{{ url_for('edit_employee', id=employee.emp_id) }}" method="post">
+    {{ edit_form.csrf_token }}
+    {{ edit_form.hidden_tag() }}
+    <br>
+    <div class="form-group">
+      <label for="empname">Username:</label>
+      {{ edit_form.empname(class="form-control", id="empname") }}
+    </div>
+    <div class="form-group">
+      <label for="email_address">Email Address:</label>
+      {{ edit_form.email_address(class="form-control", id="email_address") }}
+    </div>
+    <div class="form-group">
+      <label for="gender">Gender:</label>
+      {{ edit_form.gender(class="form-control", id="gender") }}
+    </div>
+    <div class="form-group">
+      <label for="dob">Date of Birth:</label>
+      {{ edit_form.dob(class="form-control", id="dob") }}
+    </div>
+    <div class="form-group">
+      <label for="doj">Date of Joining:</label>
+      {{ edit_form.doj(class="form-control", id="doj") }}
+    </div>
+    <div class="form-group">
+      <label for="mobile">Mobile:</label>
+      {{ edit_form.mobile(class="form-control", id="mobile") }}
+    </div>
+    <div class="form-group">
+      <label for="salary">Salary:</label>
+      {{ edit_form.salary(class="form-control", id="salary") }}
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      {{ edit_form.password(class="form-control", id="password") }}
+    </div>
+    <div class="form-group">
+      <label for="confirm_password">Confirm Password:</label>
+      {{ edit_form.confirm_password(class="form-control", id="confirm_password") }}
+    </div>
+    {{ edit_form.submit(class = "btn btn-outline-primary") }}
+    <button type="button" class="btn btn-outline-danger" onclick="closeForm{{employee.emp_id}}()">Close</button>
+  </form>
+</div>
+{% endfor %}
+
+<!-- Add Employee Form -->
+<div class="popup" id="popupAdd">
+  <form method="POST" class="form-register" action="{{ url_for('add_employee') }}">
+    {{ add_form.csrf_token() }}
+    {{ add_form.hidden_tag() }}
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <h1>
+        Add Employee
+      </h1>
+    </div>
+    <br>
+    {{ add_form.empname.label() }}
+    {{ add_form.empname(class = "form-control", placeholder="empname") }}
+    <br>
+    {{ add_form.email_address.label() }}
+    {{ add_form.email_address(class = "form-control", placeholder="email@address.com") }}
+    <br>
+    {{ add_form.gender.label() }}
+    {{ add_form.gender(class = "form-control", placeholder="password") }}
+    <br>
+    {{ add_form.dob.label() }}
+    {{ add_form.dob(class = "form-control", placeholder="yy-mm-dd") }}
+    <br>
+    {{ add_form.mobile.label() }}
+    {{ add_form.mobile(class = "form-control", placeholder="phone number") }}
+    <br>
+    {{ add_form.salary.label() }}
+    {{ add_form.salary(class = "form-control") }}
+    <br>
+    {{ add_form.password.label() }}
+    {{ add_form.password(class = "form-control", placeholder="password") }}
+    <br>
+    {{ add_form.confirm_password.label() }}
+    {{ add_form.confirm_password(class = "form-control", placeholder="password") }}
+    <br>
+    {{ add_form.submit(class = "btn btn-outline-primary") }}
+    <button type="button" class="btn btn-outline-danger" onclick="closeAdd()">Close</button>
+  </form>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="RoleModal" tabindex="-1" aria-labelledby="RoleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addRoleModalLabel">Employee Roles</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{{ url_for('handle_role') }}">
+          {{ role_form.hidden_tag() }}
+          {{ role_form.hidden_tag() }}
+          <div class="form-group">
+            {{ role_form.employee_id.label }} {{ role_form.employee_id(class="form-control") }}
+          </div>
+          <div class="form-group">
+            {{ role_form.roles.label }} {{ role_form.roles(class="form-control") }}
+          </div>
+      </div>
+      <div class="modal-footer">
+        {{ role_form.action1(class="btn btn-primary") }}
+        {{ role_form.action2(class="btn btn-danger") }}
+        {{ role_form.action3(class="btn btn-warning") }}
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- overlay  -->
+<div id="overlay" class="overlay"></div>
+
+
+{% for employee in employees %}
+<script>
+  // Function to open the popup form
+  function openForm{{employee.emp_id}}() {
+    document.getElementById("popupForm-{{employee.emp_id}}").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+  }
+
+  // Function to close the popup form
+  function closeForm{{employee.emp_id}}() {
+    document.getElementById("popupForm-{{employee.emp_id}}").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+  }
+</script>
+{% endfor %}
+
+{% endblock %}

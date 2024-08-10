@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Checkout Form</h2>
+    <!-- Button to Open the Modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+      Add Customer
+    </button>
+  <form action="" method="post">
+    <form action="" method="post">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+      {{ form.customer_id.label(class="form-label") }}
+      {{ form.customer_id(class = "form-control") }}
+      {% for error in form.customer_id.errors %}
+      <div class="alert alert-danger">{{ error }}</div>
+      {% endfor %}
+      </div>
+      <div class="mb-3">
+      {{ form.payment_method.label(class="form-label") }}
+      {{ form.payment_method(class="form-control") }}
+      {% for error in form.payment_method.errors %}
+      <div class="alert alert-danger">{{ error }}</div>
+      {% endfor %}
+      </div>
+      <div class="mb-3">
+      {{ form.submit(class = "btn btn-primary") }}
+      </div>
+      </form>
+  </form>
+
+
+
+  <!-- The Modal -->
+  <div class="modal" id="addCustomerModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add Customer</h4>
+          <button type="button" class="close btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form method="POST" action="{{ url_for('add_customer_at_confirm_order') }}">
+            {{ customer_form.hidden_tag() }}
+            <div class="form-group">
+              {{ customer_form.cust_name.label }} {{ customer_form.cust_name(class="form-control") }}
+            </div>
+            <div class="form-group">
+              {{ customer_form.phone.label }} {{ customer_form.phone(class="form-control") }}
+            </div>
+            <div class="form-group">
+              {{ customer_form.email.label }} {{ customer_form.email(class="form-control") }}
+            </div>
+            <div class="form-group">
+              <input type="hidden" name="customers" value="{{ session['customers'] }}">
+              {{ customer_form.submit(class="btn btn-primary") }}
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

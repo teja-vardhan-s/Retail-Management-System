@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block content %}
+<style>
+    /* Container styles */
+    .profile-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 80px;
+    }
+    
+    /* Profile card styles */
+    .profile-card {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 50%;
+        height: 250px;
+        padding: 40px;
+    }
+
+    /* Label styles */
+    .profile-label {
+        color: #555;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    /* Value styles */
+    .profile-value {
+        color: #333;
+        font-size: 1.2em;
+        padding-left: 10px;
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="row">
+            <div class="col-sm-4 profile-label">Name:</div>
+            <div class="col-sm-8 profile-value">{{ current_user.emp_name }}</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 profile-label">Email:</div>
+            <div class="col-sm-8 profile-value">{{ current_user.email }}</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 profile-label">DOB:</div>
+            <div class="col-sm-8 profile-value">{{ current_user.dob }}</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 profile-label">Gender:</div>
+            <div class="col-sm-8 profile-value">{{ current_user.gender }}</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 profile-label">Phone:</div>
+            <div class="col-sm-8 profile-value">{{ current_user.mobile }}</div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 profile-label">Salary:</div>
+            <div class="col-sm-8 profile-value">{{ current_user.salary }}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

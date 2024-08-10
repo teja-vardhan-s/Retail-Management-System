@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<style>
+    .container {
+        width: 90%;
+        margin: auto;
+    }
+
+    .hero {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .hero h1 {
+        color: #333;
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .hero h2 {
+        color: #555;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+
+    .hero p {
+        color: #777;
+        font-size: 1.2rem;
+        line-height: 1.6;
+    }
+
+    .cta-button {
+        display: inline-block;
+        color: #fff;
+        background-color: #007bff;
+        padding: 12px 24px;
+        margin-top: 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .cta-button:hover {
+        background-color: #0056b3;
+    }
+
+    .features {
+        padding: 30px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        text-align: left;
+    }
+
+    .features h3 {
+        color: #333;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .features strong {
+        margin-bottom: 5px;
+        display: block;
+        margin-top: 15px;
+        color: #555;
+        font-size: 1.3rem;
+    }
+
+    .img-container {
+        margin-top: 30px;
+    }
+
+    .img-container img {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        /* transition: transform 0.3s ease; */
+        max-width: 100%; /* Ensure the image doesn't exceed its container width */
+    }
+
+    /* .img-container img:hover {
+        transform: scale(1.05);
+    } */
+</style>
+
+<div class="container" style="margin-top: 80px;">
+    <div class="row">
+        <div>
+            <div class="hero">
+                <h1>Welcome to Our Application</h1>
+                <h2>About Us</h2>
+                <p>Welcome to Radar, your <strong>comprehensive solution</strong> for managing retail
+                    point-of-sale operations
+                    and sales analytics. We are dedicated to providing you with a powerful and intuitive system to
+                    streamline your retail management tasks and gain valuable insights into your business performance.
+                </p>
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('login_page') }}" class="cta-button">Get Started</a>
+                {% endif %}
+            </div>
+            <div class="img-container">
+                <img src="{{ url_for('static', filename='images/image-1.jpeg') }}" alt="POS System" style="width: 100%;">
+            </div>
+        </div>
+        <div>
+            <div class="features">
+                <h3>Features</h3>
+                <strong>Login Page:</strong> Securely log in to the system with username and password authentication.
+                <br>
+                <strong>Dashboard Page:</strong> Get an overview of recent transactions, current stock levels, and other
+                essential information at a glance.
+                <br>
+                <strong>Employee Management:</strong> Administrators can efficiently manage employee records, including
+                adding, editing, and deleting entries.
+                <br>
+                <strong>Customer Management:</strong> Easily manage customer records, with options to view transactions
+                and purchased items.
+                <br>
+                <strong>Product Management:</strong> Streamline product management with features to add, edit, and
+                delete product records.
+                <br>
+                <strong>Transaction Processing:</strong> Record sales transactions with ease, generating automatic
+                invoices with detailed transaction information.
+                <br>
+                <strong>Inventory Management:</strong> Stay on top of inventory levels with tools to update stock levels
+                and set reorder thresholds.
+                <br>
+                <strong>Supplier Management:</strong> Manage supplier records seamlessly, with options to add, edit, or
+                delete entries.
+                <br>
+                <strong>Reporting and Analytics:</strong> Gain valuable insights into sales performance and product
+                analysis, with customizable filters and reporting options.
+                <br>
+                <strong>User Profile:</strong> Employees can view and update their profile information, including
+                contact details.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

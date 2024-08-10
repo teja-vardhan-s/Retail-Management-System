@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice</title>
+    <style>
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+            font-size: 16px;
+            line-height: 24px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+
+        h2, h3 {
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        ul li span {
+            display: inline-block;
+            width: 33%;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-box">
+        <h2>Invoice</h2>
+        <p>Transaction ID: {{ transaction.tran_id }}</p>
+        <p>Date: {{ transaction.date_time }}</p>
+        <p>Payment Method: {{ transaction.payment_method }}</p>
+        <p>Customer Name: {{ customer.customer_name }}</p>
+        <p>Employee ID: {{ transaction.emp_id }}</p>
+        <h3>Items</h3>
+        <ul>
+            {% for item in transaction_items %}
+                <li><span>Product ID: {{ item.product_id }}</span> <span>Quantity: {{ item.quantity }}</span> <span>Subtotal: {{ item.subtotal }}</span></li>
+            {% endfor %}
+            <li><strong>Total Amount: {{ transaction.total_amount }}</strong></li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Inventory Management
+{% endblock %}
+
+{% block content %}
+
+
+
+{% if low_stock_products %}
+    <div class="container mt-5">
+        <h2>Low Stock Products</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Quantity to reorder</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in low_stock_products %}
+                <tr>
+                    <td>{{ product.product_id }}</td>
+                    <td>{{ product.product_name }}</td>
+                    <td>{{ product.reorder_quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+<div class="container mt-5">
+    <h1>Inventory Management</h1>
+    <table class="table table-striped"  style="overflow-y: scroll;">
+        <thead>
+            <tr>
+                <th scope="col">Product ID</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Price</th>
+                <th scope="col">Supplier ID</th>
+                <th scope="col">Supplier Name</th>
+                <th scope="col">Quantity in Stock</th>
+                <th scope="col">Reorder Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <th scope="row">{{ product.product_id }}</th>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.description }}</td>
+                <td>&#8377;{{ product.price }}</td>
+                <td>{{ product.supplier_id }}</td>
+                <td>{{ product.supplier_name }}</td>
+                <td>
+                    <div class="quantity-container">
+                        {{ product.quantity_in_stock }}
+                        <form action="{{ url_for('update_quantity_in_stock', product_id=product.product_id) }}"
+                            method="POST" class="update-form">
+                            <input type="number" name="new_quantity" placeholder="New Quantity"
+                                class="form-control form-control-sm">
+                            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        </form>
+                    </div>
+                </td>
+                <td>
+                    <div class="reorder-container">
+                        {{ product.reorder_level }}
+                        <form action="{{ url_for('update_reorder_level', product_id=product.product_id) }}"
+                            method="POST" class="update-form">
+                            <input type="number" name="new_reorder_level" placeholder="New Reorder Level"
+                                class="form-control form-control-sm">
+                            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Product</th>
+        <th scope="col">Price</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Subtotal</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart.items %}
+      <tr>
+        <td>{{ item.product.product_name }}</td>
+        <td>{{ item.product.price }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.quantity * item.product.price }}</td>
+        <td>
+          <form method="post" action="{{ url_for('remove_item', product_id=item.product.product_id) }}">
+            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td colspan="4" class="text-end"><strong>Total:</strong></td>
+        <td>{{ cart.total_amount }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  
+  <div style="display: flex; justify-content: space-between;">
+    <div>
+      <span><a href="{{ url_for('checkout') }}" class="btn btn-primary">Back</a></span>
+      <span><a href="{{ url_for('clear_cart') }}" class="btn btn-warning">Clear Cart</a></span>
+    </div>
+    <div>
+      <span><a href="{{ url_for('finalise_transaction') }}" class="btn btn-primary">Proceed to Checkout</a></span>
+    </div>
+  </div>
+
+
+</div>
+{% endblock %}
